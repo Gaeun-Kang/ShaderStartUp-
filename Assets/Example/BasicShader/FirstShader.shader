@@ -7,7 +7,11 @@ Shader "Unlit/FirstShader"
     
     Properties
     {
+         _TestFloat("float", Float) = 0
          _Color("Color",Range(0,1))= 0
+         _TestTex("TestTex",2D) = "white"{}
+         _TestCUBE("CUBE", Cube) = ""{}
+         _Vector("Vector",Vector) = (1,1,1,1) //각도,위치 혹은 그냥 float 쓰고싶을 때 
 
     }
 
@@ -62,7 +66,7 @@ Shader "Unlit/FirstShader"
             {
                 // 색상 정의하고 리턴해 줍니다. 
                 half4 customColor = half4(0.5, 0, 0, 1);
-                return customColor;
+                return customColor.rrrr;
             }
             ENDHLSL
         }
