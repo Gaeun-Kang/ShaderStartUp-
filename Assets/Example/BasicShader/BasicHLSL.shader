@@ -1,13 +1,9 @@
-Shader "Unlit/ColorShader"
+Shader "Example/BasicHLSL"
 {
-   //Change Color at Inspector
     Properties
-    {
-        _R("R", Range(0,1)) = 0
-        _G("G", Range(0,1)) = 0
-        _B("B", Range(0,1)) = 0
-
-        _Emission("Emission", Range(-1,1)) = 0
+    { 
+        //TextureMap 
+        _MainMap("MainMap", 2D) = "white"{}    
     }
 
     SubShader
@@ -22,17 +18,6 @@ Shader "Unlit/ColorShader"
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-
-            //Setting C Buffer 
-            //Now this shader use SRP Batcher 
-            CBUFFER_START(UnityPerMaterial)
-            float _R;
-            float _G;
-            float _B;
-
-            float _Emission;
-            CBUFFER_END 
-
             struct Attributes
             {
                 float4 positionOS   : POSITION;
@@ -43,6 +28,15 @@ Shader "Unlit/ColorShader"
                 float4 positionHCS  : SV_POSITION;
             };
 
+            //Texture + Sampler 
+            TEXTURE2D(_MainMap);
+            SAMPLER(sampler_MainMap);
+
+            //varialbe with CBuffer 
+            CBUFFER_START(UnityPerMaterial)
+            float4 _MainMap_ST;
+            CBUFFER_END
+
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
@@ -52,16 +46,10 @@ Shader "Unlit/ColorShader"
 
             half4 frag() : SV_Target
             {
-                float4 ColorRange;
-                ColorRange.rgb = float3(_R,_G,_B);
-                ColorRange.rgb += _Emission;
-                ColorRange.a = 1;
-
-                return ColorRange;
+                half4 customColor = half4(0.5, 0, 0, 1);
+                return customColor;
             }
             ENDHLSL
         }
     }
-
-
 }
