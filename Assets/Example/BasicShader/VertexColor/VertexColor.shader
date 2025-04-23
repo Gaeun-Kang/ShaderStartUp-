@@ -4,6 +4,10 @@ Shader "Custom/VertexColor"
     Properties
     {
         _BaseMap("BaseMap",2D) = "white"{}
+        _BaseMap2("BaseMap2",2D) = "white"{}
+        _BaseMap3("BaseMap3",2D) = "white"{}
+        _BaseMap4("BaseMap4",2D) = "white"{}
+
     }
 
     SubShader
@@ -22,14 +26,14 @@ Shader "Custom/VertexColor"
             {
                 float4 positionOS   : POSITION;
                 float2 uv           : TEXCOORD0;
-                float4 color        : COLOR; //버텍스 칼라 받아오기 
+                float4 color : COLOR; //GET VERTEX Color
             };
 
             struct Varyings
             {
                 float4 positionHCS  : SV_POSITION;
                 float2 uv           : TEXCOORD0;
-                float4 color        : COLOR; //버텍스 칼라 출력하기 = 
+                float4 color : COLOR; //print vertex Color
             };
 
             TEXTURE2D(_BaseMap);
@@ -44,16 +48,15 @@ Shader "Custom/VertexColor"
                 Varyings OUT;
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
                 OUT.uv = IN.uv;
-                OUT.color = IN.color; //Attributes 에서 받아서 Varyings로 토-스
+                OUT.color = IN.color;
                 return OUT;
             }
 
             half4 frag(Varyings IN) : SV_Target
             {
                 half4 color = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, TRANSFORM_TEX(IN.uv, _BaseMap));
-
-                half4 vcolor = IN.color;//버텍스 칼라를 받아와서
-                return color * vcolor;// 텍스쳐와 버텍스 칼라를 곱해서 출력
+                half4 vcolor = IN.color; 
+                return color * vcolor;
             }
             ENDHLSL
         }
