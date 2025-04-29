@@ -1,6 +1,6 @@
 Shader "Unlit/FresenlOutline_Se"
 { 
-	    Properties
+    Properties
     {
         _OutlineColor ("Outline Color", Color) = (1,1,1,1)
         _OutlineThickness ("Outline Thickness", Float) = 0.02
@@ -12,9 +12,9 @@ Shader "Unlit/FresenlOutline_Se"
         Pass
         {
             Name "OutlinePass"
-            Blend SrcAlpha OneMinusSrcAlpha
-            ZWrite Off
             Cull Front
+            ZWrite Off
+            Blend SrcAlpha OneMinusSrcAlpha
 
             HLSLPROGRAM
             #pragma vertex vert
@@ -34,8 +34,8 @@ Shader "Unlit/FresenlOutline_Se"
             struct v2f
             {
                 float4 positionCS : SV_POSITION;
-                float3 viewDirWS : TEXCOORD0;
-                float3 normalWS : TEXCOORD1;
+                float3 normalWS : TEXCOORD0;
+                float3 viewDirWS : TEXCOORD1;
             };
 
             v2f vert(appdata v)
@@ -55,6 +55,11 @@ Shader "Unlit/FresenlOutline_Se"
             float4 frag(v2f i) : SV_Target
             {
                 float fresnel = pow(1.0 - saturate(dot(i.normalWS, i.viewDirWS)), _FresnelPower);
+                
+                // 중심부는 아예 알파값 0으로 보내버리기
+                if (fresnel < 0.01)
+                    discard;
+
                 return float4(_OutlineColor.rgb, fresnel * _OutlineColor.a);
             }
 
