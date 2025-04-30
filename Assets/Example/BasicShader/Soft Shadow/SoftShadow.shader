@@ -15,31 +15,45 @@ Shader "Unlit/SoftShadow"
         {
             HLSLPROGRAM
             #pragma prefer_hlslcc gles 
-            #pragma exclude_renders d3d11_9x
             #pragma vertex vert
             #pragma fragment frag
 
+
+            //Gpu Instancing(Object Copy rendering in GPU)
             #pragma multi_compile_instancing
+            //Unity Public Fog
             #pragma multi_compile_fog
             
-            
+            //Shadow : Main-CASCADE-Soft 
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile _ _SHADOWS_SOFT
 
             //Lighting.hlsl also has Shadows.hlsl 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl" 
 
+
+            // UNITY_VERTEX_INPUT_INSTANCE_ID
+            //
             struct Attributes
             {
                 float4 positionOS   : POSITION;
-                float2 uv :TEXCOORD0; //uv
+                float2 uv : TEXCOORD0;
+                float3 normal : NORMAL;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct Varyings
             {
                 float4 positionHCS  : SV_POSITION;
-                float2 uv : TEXCOORD0; //uv 
+                float2 uv : TEXCOORD0; 
+                float FOGcOORD : TEXCOOR1;
+                float3 normal : NORMAL;
+                float4 shadowCoord : TEXCOOR2;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+         
             };
-            
             
             //write varialbe and wrap with CBuffer 
             CBUFFER_START(UnityPerMaterial)
