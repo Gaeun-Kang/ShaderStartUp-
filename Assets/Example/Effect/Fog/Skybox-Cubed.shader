@@ -77,7 +77,7 @@ Properties
                 // 항상 일정한 안개 값
                 float fogDensity = unity_FogParams.x;
               //o.fogCoord = ComputeFogFactor(o.vertex.x);
-          //  o.fogCoord *= fogDensity;
+               //  o.fogCoord *= fogDensity;
             o.fogCoord = ComputeFogFactor(o.vertex.z) * fogDensity;
 
                 return o;
@@ -93,6 +93,7 @@ Properties
 
                  //unity_ColorSpaceDouble.rgb
                 color = color * _Tint.rgb * half4(4.59479380, 4.59479380, 4.59479380, 2.0).rgb; 
+               // color *= SRGBToLinear(_Tint.rgb);
                 color *= _Exposure;
 
                 color = MixFog(color, i.fogCoord);
