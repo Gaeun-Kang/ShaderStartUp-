@@ -1,5 +1,6 @@
 Shader "Unlit/2Pass_New"
 {
+    //https://blog.naver.com/mnpshino/221850973199
     Properties
     {
         _Color ("Color", Color) = (1,1,1,1)

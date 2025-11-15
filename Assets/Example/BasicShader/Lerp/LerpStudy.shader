@@ -5,8 +5,8 @@ Shader "Unlit/LerpStudy"
     {
         _BaseMap("BaseMap",2D) = "white"{}
         _SubMap("SubMap", 2D) = "white"{}
-        //_LerpControl("LerpControl", Range(0,1)) = 0 /
-        _LerpControl("LerpControlTexture",2D) = "white"{} //Texture mode
+        _LerpControl("LerpControl", Range(0,1)) = 0 
+        //_LerpControl("LerpControlTexture",2D) = "white"{} //Texture mode
     }
 
     SubShader
@@ -45,8 +45,8 @@ Shader "Unlit/LerpStudy"
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
                 float4 _SubMap_ST;
-                float4 _LerpControlTex_ST;
-                //float _LerpControl;
+                //float4 _LerpControlTex_ST;
+                float _LerpControl;
 
             CBUFFER_END
 
@@ -62,10 +62,9 @@ Shader "Unlit/LerpStudy"
             {
                 half4 TextureA = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap,IN.uv);
                 half4 TextureB = SAMPLE_TEXTURE2D(_SubMap, sampler_SubMap, IN.uv);
-                half4 LerpControlTex = SAMPLE_TEXTURE2D(_LerpControlTex, sampler_LerpControlTex, TRANSFORM_TEX(IN.uv, _LerpControlTex));
                
                 half4 finalColor;
-                finalColor = lerp(TextureA, TextureB, LerpControlTex.r);
+                finalColor = lerp(TextureA, TextureB, _LerpControl);
                 return finalColor;
             }
             ENDHLSL
