@@ -85,6 +85,8 @@ Shader "Unlit/2Pass_Outline"
                 float4 positionHCS  : SV_POSITION;
             };
 
+            sampler2D _MainTex;
+
             CBUFFER_START(UnityPerMaterial)
             float4 _OutlineColor;
             float  _OutlineThickness;

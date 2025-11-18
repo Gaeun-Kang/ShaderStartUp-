@@ -86,9 +86,10 @@ Shader "Unlit/Cusotm Light"
             }
             ENDHLSL
         }
-        
+      }
+    }  
         //Shadow Pass
-
+        /*
         Pass 
         {
             Name "ShadowCaster"
